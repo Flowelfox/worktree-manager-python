@@ -21,7 +21,7 @@ from .exceptions import (
 )
 from .models import Config, HookConfig, Worktree, WorktreeMeta
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "flowelfox"
 
 __all__ = [

@@ -1,6 +1,6 @@
 [project]
 name = "wtpython"
-version = "1.0.0"
+version = "1.1.0"
 description = "Git Worktree Manager with tmux integration - Python implementation"
 authors = [
     {name = "flowelfox", email = "flowelfox@example.com"},
