@@ -1,11 +1,15 @@
 """Git operations wrapper with cross-platform support."""
 
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
 from .exceptions import GitOperationError, NotInGitRepository
 from .models import Worktree
+
+# Resolve git binary path once at import time
+_GIT_BIN: str = shutil.which("git") or "git"
 
 
 class GitOps:
@@ -16,9 +20,11 @@ class GitOps:
         cmd: list[str], cwd: Path | None = None, check: bool = True
     ) -> subprocess.CompletedProcess:
         """Run a git command."""
-        # Ensure git command
-        if cmd[0] != "git":
-            cmd = ["git"] + cmd
+        # Ensure git command with resolved path
+        if cmd[0] == "git":
+            cmd[0] = _GIT_BIN
+        else:
+            cmd = [_GIT_BIN] + cmd
 
         try:
             result = subprocess.run(
@@ -31,6 +37,10 @@ class GitOps:
                 shell=(os.name == "nt"),
             )
             return result
+        except FileNotFoundError as e:
+            raise GitOperationError(
+                "git not found. Please install git and ensure it is in your PATH."
+            ) from e
         except subprocess.CalledProcessError as e:
             if check:
                 raise GitOperationError(f"Git command failed: {e.stderr}") from e
