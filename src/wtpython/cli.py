@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 import click
+import click.shell_completion
 from rich.table import Table
 
 from . import __version__
